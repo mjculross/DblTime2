@@ -130,6 +130,18 @@
 
        {
         "type": "png",
+        "defName": "IMAGE_DATENUM_00",
+        "file": "images/datenum_00.png"
+        },
+
+       {
+        "type": "png",
+        "defName": "IMAGE_DATENUM_30",
+        "file": "images/datenum_30.png"
+        },
+
+       {
+        "type": "png",
         "defName": "IMAGE_DATENUM_INV_TZ",
         "file": "images/datenum_inv_tz.png"
        },
@@ -288,6 +300,30 @@
         "type": "png",
         "defName": "IMAGE_INV_MD",
         "file": "images/datenum_inv_md.png"
+      },
+ 
+      {
+        "type": "png",
+        "defName": "IMAGE_SECS",
+        "file": "images/datenum_secs.png"
+      },
+
+      {
+        "type": "png",
+        "defName": "IMAGE_NOSECS",
+        "file": "images/datenum_nosecs.png"
+      },
+
+      {
+        "type": "png",
+        "defName": "IMAGE_INV_SECS",
+        "file": "images/datenum_inv_secs.png"
+      },
+
+      {
+        "type": "png",
+        "defName": "IMAGE_INV_NOSECS",
+        "file": "images/datenum_inv_nosecs.png"
       }
  ]
 }
