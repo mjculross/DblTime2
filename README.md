@@ -3,10 +3,11 @@ NOTE: to allow full use of the buttons, DblTime
    as "Settings" on the Pebble), not as a
    watchface . . . it just displays a watchface
 
-Features (v 1.3):
+Features (v 1.4):
 - dual date & time displays
-- adjustable # hours offset (-23 to +23) between
-  primary & secondary time displays (default = 0)
+- adjustable # hours offset (-23:30 to +23:30) in
+  30-minute increments, between primary &
+  secondary time displays (default = 0:00)
 - when # hours offset = 0, secondary date & time
   are not displayed (primary time display only)
 - enable/disable snooze mode (display blanks after
@@ -15,6 +16,8 @@ Features (v 1.3):
   hour) - default = disable
 - selectable mm/dd/yy vs dd/mm/yy date display -
   default = mm/dd/yy
+- enable/disable display of seconds - default =
+  enable
 - displays 12/24 hour format time (using current
   Pebble Settings)
 - eliminated delay when showing time at start-up &
@@ -31,14 +34,20 @@ Operating instructions:
 - with "set mode" on "chime", press the "up" & "down"
   buttons to toggle between "enable" & "disable"
 - to change "set mode" to "month-day", long-press
-  the "select" button (MD/DM blinks)
+  the "select" button (M/D blinks)
 - with "set mode" on "month-day", press the "up" &
   "down" buttons to toggle between mm/dd/yy &
   dd/mm/yy
+- to change "set mode" to "display seconds",
+  long-press the "select" button (S blinks)
+- with "set mode" on "display seconds", press the
+  "up" & "down" buttons to toggle between "enable"
+  & "disable"
 - to change "set mode" to "offset", long-press the
   "select" button (TZ blinks)
 - with "set mode" on "offset", press the "up" & "down"
-  buttons to adjust the offset value
+  buttons to adjust the offset value by 30-minute
+  increments
 - with "set mode" on "offset", press the "select" button
   to force the offset back to 0
 - to exit "set mode", long-press the "select" button
