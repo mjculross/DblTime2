@@ -3,8 +3,10 @@ NOTE: to allow full use of the buttons, DblTime
    as "Settings" on the Pebble), not as a
    watchface . . . it just displays a watchface
 
-Features (v 1.4):
+Features (v 1.5):
 - dual date & time displays
+- with black-on-white for daytime displays & 
+  white on black for nighttime displays
 - adjustable # hours offset (-23:30 to +23:30) in
   30-minute increments, between primary &
   secondary time displays (default = 0:00)
@@ -13,14 +15,14 @@ Features (v 1.4):
 - enable/disable snooze mode (display blanks after
   10 seconds) - default = enable
 - enable/disable hourly chime mode (buzzes on the
-  hour) - default = disable
+  hour & activates display) - default = disable
 - selectable mm/dd/yy vs dd/mm/yy date display -
   default = mm/dd/yy
 - enable/disable display of seconds - default =
   enable
 - displays 12/24 hour format time (using current
   Pebble Settings)
-- eliminated delay when showing time at start-up &
+- minimal delay when showing time at start-up &
   when waking from snooze
 
 Operating instructions:
