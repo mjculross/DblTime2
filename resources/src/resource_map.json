@@ -10,6 +10,12 @@
 
    {
       "type": "png",
+      "defName": "IMAGE_SPLASH",
+      "file": "images/splash.png"
+   },
+
+   {
+      "type": "png",
       "defName": "IMAGE_COLON",
       "file": "images/char_colon.png"
    },

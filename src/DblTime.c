@@ -5,7 +5,7 @@
 
 PBL_APP_INFO(MY_UUID,
 	     "DblTime", "Pebble Technology & KD5RXT",
-	     1, 5, /* App major/minor version */
+	     1, 6, /* App major/minor version */
 	     RESOURCE_ID_IMAGE_MENU_ICON,
 //	     APP_INFO_WATCH_FACE);
 	     APP_INFO_STANDARD_APP);
@@ -37,6 +37,8 @@ int setmode_timer = SETMODE_SECONDS;
 int time_offset = 0;
 
 int app_state = APP_IDLE_STATE;
+
+int splash_timer = 5;
 
 BmpContainer time_am_pm_image;
 BmpContainer time2_am_pm_image;
@@ -280,8 +282,8 @@ void display_offset(void)
       set_container_image(&tz_images[1], RESOURCE_ID_IMAGE_DATENUM_MINUS, GPoint(95, 5));
    }
 
-   set_container_image(&tz_images[2], DATENUM_IMAGE_RESOURCE_IDS[abs(time_offset) / 20], GPoint(107, 5));
-   set_container_image(&tz_images[3], DATENUM_IMAGE_RESOURCE_IDS[(abs(time_offset) / 2) % 10], GPoint(119, 5));
+   set_container_image(&tz_images[2], DATENUM_IMAGE_RESOURCE_IDS[abs(time_offset) / 20], GPoint(107, 3));
+   set_container_image(&tz_images[3], DATENUM_IMAGE_RESOURCE_IDS[(abs(time_offset) / 2) % 10], GPoint(119, 3));
 
    if ((abs(time_offset) % 2) != 0)
    {
@@ -499,6 +501,8 @@ void handle_init(AppContextRef ctx)
    snooze_timer = SNOOZE_SECONDS;
    setmode_timer = SETMODE_SECONDS;
    time_offset = 0;
+
+   splash_timer = 5;
    // END manual var intialization
 
    app_state = APP_IDLE_STATE;
@@ -541,18 +545,33 @@ void handle_init(AppContextRef ctx)
    bmp_init_container(RESOURCE_ID_IMAGE_DATENUM_MINUS, &secs_image);
    // END manual var intialization
 
-   display_chime();
-   display_snooze();
-   display_md();
-   display_secs();
-   display_offset();
-   wakeup_display();
+   bmp_init_container(RESOURCE_ID_IMAGE_SPLASH, &secs_image);
+   layer_add_child(&window.layer, &secs_image.layer.layer);
 }  // handle_init()
 
 
 void handle_second_tick(AppContextRef ctx, PebbleTickEvent *t)
 {
    (void)ctx;
+
+   if (splash_timer > 0)
+   {
+      splash_timer--;
+
+      if (splash_timer != 0)
+      {
+         return;
+      }
+      else
+      {
+         display_chime();
+         display_snooze();
+         display_md();
+         display_secs();
+         display_offset();
+         wakeup_display();
+      }
+   }
 
    // hourly chime
    if ((chime_enabled) && (t->tick_time->tm_hour != previous_time.tm_hour))
@@ -1844,4 +1863,7 @@ void pbl_main(void *params)
 
    app_event_loop(params, &handlers);
 }  // pbl_main()
+
+
+
 
