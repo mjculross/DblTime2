@@ -1,9 +1,11 @@
-NOTE: to allow full use of the buttons, DblTime
+DblTIme2 - display two timezones
+
+NOTE: to allow full use of the buttons, DblTime2
    loads in as an app (at the same menu level
    as "Settings" on the Pebble), not as a
    watchface . . . it just displays a watchface
 
-Features (v 1.5):
+Features (v 2.0):
 - dual date & time displays
 - with black-on-white for daytime displays & 
   white on black for nighttime displays
@@ -24,6 +26,7 @@ Features (v 1.5):
   Pebble Settings)
 - minimal delay when showing time at start-up &
   when waking from snooze
+- preference settings saved in persistent storage
 
 Operating instructions:
 - to enter "set mode" (snooze), long-press the "select"

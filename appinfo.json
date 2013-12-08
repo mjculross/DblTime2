@@ -1,0 +1,267 @@
+{
+  "uuid": "9a2532a8-c001-4f5c-803f-8b18195b3abb",
+  "shortName": "DblTime2",
+  "longName": "DblTime2",
+  "companyName": "Pebble Technology & KD5RXT",
+  "versionCode": 2,
+  "versionLabel": "2.0.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {},
+  "resources": {
+    "media": [
+      {
+        "menuIcon": true,
+        "type": "png",
+        "name": "IMAGE_MENU_ICON",
+        "file": "images/menu_icon_DblTime.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_SPLASH",
+        "file": "images/splash.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_WHITE",
+        "file": "images/white.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_COLON",
+        "file": "images/char_colon.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NO_COLON",
+        "file": "images/char_no_colon.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_AM_MODE",
+        "file": "images/time_format_AM.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_PM_MODE",
+        "file": "images/time_format_PM.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NONE_MODE",
+        "file": "images/time_format_none.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_SUN",
+        "file": "images/day_sun.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_MON",
+        "file": "images/day_mon.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_TUE",
+        "file": "images/day_tue.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_WED",
+        "file": "images/day_wed.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_THU",
+        "file": "images/day_thu.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_FRI",
+        "file": "images/day_fri.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DAY_NAME_SAT",
+        "file": "images/day_sat.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_0",
+        "file": "images/datenum_0.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_1",
+        "file": "images/datenum_1.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_2",
+        "file": "images/datenum_2.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_3",
+        "file": "images/datenum_3.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_4",
+        "file": "images/datenum_4.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_5",
+        "file": "images/datenum_5.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_6",
+        "file": "images/datenum_6.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_7",
+        "file": "images/datenum_7.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_8",
+        "file": "images/datenum_8.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_9",
+        "file": "images/datenum_9.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_00",
+        "file": "images/datenum_00.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_30",
+        "file": "images/datenum_30.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_TZ",
+        "file": "images/datenum_tz.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_PLUS",
+        "file": "images/datenum_plus.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_MINUS",
+        "file": "images/datenum_minus.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DATENUM_SLASH",
+        "file": "images/datenum_slash.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_0",
+        "file": "images/num_0.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_1",
+        "file": "images/num_1.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_2",
+        "file": "images/num_2.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_3",
+        "file": "images/num_3.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_4",
+        "file": "images/num_4.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_5",
+        "file": "images/num_5.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_6",
+        "file": "images/num_6.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_7",
+        "file": "images/num_7.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_8",
+        "file": "images/num_8.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_9",
+        "file": "images/num_9.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NUM_BLANK",
+        "file": "images/num_blank.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NOCHIME",
+        "file": "images/char_nochime.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_CHIME",
+        "file": "images/char_chime.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NOSNOOZE",
+        "file": "images/char_nosnooze.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_SNOOZE",
+        "file": "images/char_snooze.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_DM",
+        "file": "images/datenum_dm.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_MD",
+        "file": "images/datenum_md.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_SECS",
+        "file": "images/datenum_secs.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NOSECS",
+        "file": "images/datenum_nosecs.png"
+      }
+    ]
+  }
+}
