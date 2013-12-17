@@ -1,3 +1,18 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* *                                                                 * */
+/* *                           DblTime2                              * */
+/* *                                                                 * */
+/* *             A watchface that dislays two timezones              * */
+/* *                                                                 * */
+/* *                 [ SDK 2.0 compatible version ]                  * */
+/* *                                                                 * */
+/* *                    by Mark J Culross, KD5RXT                    * */
+/* *                                                                 * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 #include <pebble.h>
 
 // This is a custom defined key for saving the snooze_enabled flag
@@ -112,6 +127,7 @@ const int BIG_DIGIT_IMAGE_RESOURCE_IDS[] =
 
 
 static void click_config_provider(void *context);
+static void deinit(void);
 static void display_chime(GContext *ctx, bool is_night);
 static void display_md(GContext *ctx, bool is_night);
 static void display_offset(GContext *ctx, bool is_night);
@@ -119,9 +135,8 @@ static void display_secs(GContext *ctx, bool is_night);
 static void display_snooze(GContext *ctx, bool is_night);
 static void down_single_click_handler(ClickRecognizerRef recognizer, void *context);
 static void handle_accel_tap(AccelAxisType axis, int32_t direction);
-static void handle_deinit(void);
-static void handle_init(void);
 static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed);
+static void init(void);
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context);
 static void select_long_release_handler(ClickRecognizerRef recognizer, void *context);
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context);
@@ -141,6 +156,53 @@ static void click_config_provider(void *context)
    window_single_click_subscribe(BUTTON_ID_SELECT, select_single_click_handler);
    window_long_click_subscribe(BUTTON_ID_SELECT, 250, select_long_click_handler, select_long_release_handler);
 }  // click_config_provider()
+
+
+static void deinit(void)
+{
+   // Save all settings into persistent storage on app exit
+   persist_write_int(PKEY_CHIME_ENABLED, chime_enabled);
+   persist_write_int(PKEY_SNOOZE_ENABLED, snooze_enabled);
+   persist_write_int(PKEY_SHOW_SECONDS, show_seconds);
+   persist_write_int(PKEY_MONTH_BEFORE_DAY, month_before_day);
+   persist_write_int(PKEY_TIME_OFFSET, time_offset);
+
+   layer_remove_from_parent(bitmap_layer_get_layer(time_layer));
+   bitmap_layer_destroy(time_layer);
+
+   gbitmap_destroy(secs_image);
+   gbitmap_destroy(md_image);
+   gbitmap_destroy(snooze_image);
+   gbitmap_destroy(chime_image);
+   gbitmap_destroy(day2_image);
+   gbitmap_destroy(day_image);
+   gbitmap_destroy(am_pm2_image);
+   gbitmap_destroy(am_pm_image);
+
+   for (int i = 0; i < TOTAL_TZ_IMAGES; i++)
+   {
+      gbitmap_destroy(tz_image[i]);
+   }
+
+   for (int i = 0; i < TOTAL_DATE_DIGITS; i++)
+   {
+      gbitmap_destroy(date2_image[i]);
+      gbitmap_destroy(date_image[i]);
+   }
+
+   for (int i = 0; i < TOTAL_TIME_DIGITS; i++)
+   {
+      gbitmap_destroy(time2_image[i]);
+      gbitmap_destroy(time_image[i]);
+   }
+
+   gbitmap_destroy(splash_image);
+   bitmap_layer_destroy(time_layer);
+
+   tick_timer_service_unsubscribe();
+   accel_tap_service_unsubscribe();
+   window_destroy(window);
+}  // deinit()
 
 
 static void display_chime(GContext *ctx, bool is_night)
@@ -462,6 +524,7 @@ static void down_single_click_handler(ClickRecognizerRef recognizer, void *conte
 static void handle_accel_tap(AccelAxisType axis, int32_t direction)
 {
    light_timer = 4;
+   splash_timer = 0;
 
    light_on = !light_on;
 
@@ -478,121 +541,7 @@ static void handle_accel_tap(AccelAxisType axis, int32_t direction)
 
    refresh_display = true;
    layer_mark_dirty(window_layer);
-}  // accel_tap_handler()
-
-
-static void handle_deinit(void)
-{
-   // Save all settings into persistent storage on app exit
-   persist_write_int(PKEY_CHIME_ENABLED, chime_enabled);
-   persist_write_int(PKEY_SNOOZE_ENABLED, snooze_enabled);
-   persist_write_int(PKEY_SHOW_SECONDS, show_seconds);
-   persist_write_int(PKEY_MONTH_BEFORE_DAY, month_before_day);
-   persist_write_int(PKEY_TIME_OFFSET, time_offset);
-
-   layer_remove_from_parent(bitmap_layer_get_layer(time_layer));
-   bitmap_layer_destroy(time_layer);
-
-   gbitmap_destroy(secs_image);
-   gbitmap_destroy(md_image);
-   gbitmap_destroy(snooze_image);
-   gbitmap_destroy(chime_image);
-   gbitmap_destroy(day2_image);
-   gbitmap_destroy(day_image);
-   gbitmap_destroy(am_pm2_image);
-   gbitmap_destroy(am_pm_image);
-
-   for (int i = 0; i < TOTAL_TZ_IMAGES; i++)
-   {
-      gbitmap_destroy(tz_image[i]);
-   }
-
-   for (int i = 0; i < TOTAL_DATE_DIGITS; i++)
-   {
-      gbitmap_destroy(date2_image[i]);
-      gbitmap_destroy(date_image[i]);
-   }
-
-   for (int i = 0; i < TOTAL_TIME_DIGITS; i++)
-   {
-      gbitmap_destroy(time2_image[i]);
-      gbitmap_destroy(time_image[i]);
-   }
-
-   gbitmap_destroy(splash_image);
-   bitmap_layer_destroy(time_layer);
-
-   tick_timer_service_unsubscribe();
-   accel_tap_service_unsubscribe();
-   window_destroy(window);
-}  // handle_deinit()
-
-
-static void handle_init(void)
-{
-   GRect dummy_frame = { {0, 0}, {0, 0} };
-
-   window = window_create();
-   if (window == NULL)
-   {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "...couldn't allocate window memory...");
-      return;
-   }
-
-   // Get all settings from persistent storage for use if they exist, otherwise use the default
-   chime_enabled = persist_exists(PKEY_CHIME_ENABLED) ? persist_read_int(PKEY_CHIME_ENABLED) : CHIME_ENABLED_DEFAULT;
-   snooze_enabled = persist_exists(PKEY_SNOOZE_ENABLED) ? persist_read_int(PKEY_SNOOZE_ENABLED) : SNOOZE_ENABLED_DEFAULT;
-   show_seconds = persist_exists(PKEY_SHOW_SECONDS) ? persist_read_int(PKEY_SHOW_SECONDS) : SHOW_SECONDS_DEFAULT;
-   month_before_day = persist_exists(PKEY_MONTH_BEFORE_DAY) ? persist_read_int(PKEY_MONTH_BEFORE_DAY) : MONTH_BEFORE_DAY_DEFAULT;
-   time_offset = persist_exists(PKEY_TIME_OFFSET) ? persist_read_int(PKEY_TIME_OFFSET) : TIME_OFFSET_DEFAULT;
-
-   window_set_fullscreen(window, true);
-   window_stack_push(window, true /* Animated */);
-   window_layer = window_get_root_layer(window);
-
-   window_set_click_config_provider(window, click_config_provider);
-   layer_set_update_proc(window_layer, update_display);
-
-   splash_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SPLASH); 
-   time_layer = bitmap_layer_create(dummy_frame);
-   bitmap_layer_set_background_color(time_layer, GColorClear);
-   bitmap_layer_set_bitmap(time_layer, splash_image);
-   layer_add_child(window_layer, bitmap_layer_get_layer(time_layer));
-
-   for (int i = 0; i < TOTAL_TIME_DIGITS; i++)
-   {
-     time_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_NUM_0);
-     time2_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_NUM_0);
-   }
-
-   for (int i = 0; i < TOTAL_DATE_DIGITS; i++)
-   {
-     date_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
-     date2_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
-   }
-
-   for (int i = 0; i < TOTAL_TZ_IMAGES; i++)
-   {
-     tz_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
-   }
-
-   am_pm_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_AM_MODE);
-   am_pm2_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_AM_MODE);
-
-   day_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DAY_NAME_SUN);
-   day2_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DAY_NAME_SUN);
-
-   chime_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CHIME);
-
-   snooze_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SNOOZE);
-
-   md_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MD);
-
-   secs_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SECS);
-
-   accel_tap_service_subscribe(&handle_accel_tap);
-   tick_timer_service_subscribe(SECOND_UNIT, &handle_second_tick);
-}  // handle_init()
+}  // handle_accel_tap()
 
 
 static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed)
@@ -667,6 +616,73 @@ static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed)
 }  // handle_second_tick()
 
 
+static void init(void)
+{
+   GRect dummy_frame = { {0, 0}, {0, 0} };
+
+   window = window_create();
+   if (window == NULL)
+   {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "...couldn't allocate window memory...");
+      return;
+   }
+
+   // Get all settings from persistent storage for use if they exist, otherwise use the default
+   chime_enabled = persist_exists(PKEY_CHIME_ENABLED) ? persist_read_int(PKEY_CHIME_ENABLED) : CHIME_ENABLED_DEFAULT;
+   snooze_enabled = persist_exists(PKEY_SNOOZE_ENABLED) ? persist_read_int(PKEY_SNOOZE_ENABLED) : SNOOZE_ENABLED_DEFAULT;
+   show_seconds = persist_exists(PKEY_SHOW_SECONDS) ? persist_read_int(PKEY_SHOW_SECONDS) : SHOW_SECONDS_DEFAULT;
+   month_before_day = persist_exists(PKEY_MONTH_BEFORE_DAY) ? persist_read_int(PKEY_MONTH_BEFORE_DAY) : MONTH_BEFORE_DAY_DEFAULT;
+   time_offset = persist_exists(PKEY_TIME_OFFSET) ? persist_read_int(PKEY_TIME_OFFSET) : TIME_OFFSET_DEFAULT;
+
+   window_set_fullscreen(window, true);
+   window_stack_push(window, true /* Animated */);
+   window_layer = window_get_root_layer(window);
+
+   window_set_click_config_provider(window, click_config_provider);
+   layer_set_update_proc(window_layer, update_display);
+
+   splash_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SPLASH); 
+   time_layer = bitmap_layer_create(dummy_frame);
+   bitmap_layer_set_background_color(time_layer, GColorClear);
+   bitmap_layer_set_bitmap(time_layer, splash_image);
+   layer_add_child(window_layer, bitmap_layer_get_layer(time_layer));
+
+   for (int i = 0; i < TOTAL_TIME_DIGITS; i++)
+   {
+     time_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_NUM_0);
+     time2_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_NUM_0);
+   }
+
+   for (int i = 0; i < TOTAL_DATE_DIGITS; i++)
+   {
+     date_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
+     date2_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
+   }
+
+   for (int i = 0; i < TOTAL_TZ_IMAGES; i++)
+   {
+     tz_image[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DATENUM_0);
+   }
+
+   am_pm_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_AM_MODE);
+   am_pm2_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_AM_MODE);
+
+   day_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DAY_NAME_SUN);
+   day2_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DAY_NAME_SUN);
+
+   chime_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CHIME);
+
+   snooze_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SNOOZE);
+
+   md_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MD);
+
+   secs_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SECS);
+
+   accel_tap_service_subscribe(&handle_accel_tap);
+   tick_timer_service_subscribe(SECOND_UNIT, &handle_second_tick);
+}  // init()
+
+
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context)
 {
    app_state++;
@@ -709,6 +725,16 @@ static void select_single_click_handler(ClickRecognizerRef recognizer, void *con
          }
 
          light_timer = 4;
+
+         if (splash_timer > 0)
+         {
+            splash_timer = 0;
+
+            // activate refresh so everything paints
+            refresh_display = true;
+            layer_mark_dirty(window_layer);
+         }
+
 
          light_on = !light_on;
 
@@ -1512,9 +1538,9 @@ static void update_display(Layer *layer, GContext *ctx)
 
 int main(void)
 {
-   handle_init();
+   init();
    app_event_loop();
-   handle_deinit();
+   deinit();
 }  // main()
 
 

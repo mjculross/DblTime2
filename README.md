@@ -5,7 +5,7 @@ NOTE: to allow full use of the buttons, DblTime2
    as "Settings" on the Pebble), not as a
    watchface . . . it just displays a watchface
 
-Features (v 2.0):
+Features (v 2.2):
 - dual date & time displays
 - with black-on-white for daytime displays & 
   white on black for nighttime displays
